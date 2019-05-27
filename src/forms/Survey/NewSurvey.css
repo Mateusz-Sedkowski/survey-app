@@ -1,0 +1,29 @@
+.NewSurvey {
+    width: 20%;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1px solid black;
+    margin: 15px 10px;
+    box-shadow: black 2px 2px;
+}
+
+.NewSurvey .SubmitButton {
+    background-color: #ffc107;
+    margin: 10px 20px 20px 0;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 5px;
+    box-shadow: lightgray 1px 1px;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+.NewSurvey .SubmitButton:hover {
+    background-color: #FFD93C;
+    color: navy;
+}

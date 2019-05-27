@@ -1,0 +1,15 @@
+.Navbar {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    flex-flow: row;
+    background-color: #0D2D57;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    height: 80%;
+    width: 250px;
+    margin-left: 20px;
+}

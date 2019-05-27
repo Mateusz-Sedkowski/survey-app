@@ -1,0 +1,23 @@
+.Survey {
+    width: 600px;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1px solid black;
+    margin: 5px 10px;
+    box-shadow: black 2px 2px;
+}
+
+.Title {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.Title p {
+    margin: 0;
+}
