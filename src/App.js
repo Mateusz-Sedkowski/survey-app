@@ -1,56 +1,31 @@
-import React, {Component} from 'react';
-import './App.css';
-// import axios from './axios-orders'; TODO TO SAVE AWS FREE TIER
-import Surveys from './containers/Surveys/Surveys';
-import SurveyForm from './Forms/Survey/NewSurvey';
-import Navbar from './hoc/Navbar/Navbar';
-
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretDown, faFileSignature, faCog, faSignOutAlt} from '@fortawesome/free-solid-svg-icons'
+import React, {Component} from 'react'
+import './App.css'
+import {BrowserRouter} from 'react-router-dom'
+// import axios from './axios-orders'
+import PublicView from './hoc/PublicView/PublicView'
+import PrivateView from './hoc/PrivateView/PrivateView'
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {faCaretDown, faFileSignature, faCog, faSignOutAlt} from '@fortawesome/free-solid-svg-icons'
 
 library.add(faCaretDown, faFileSignature, faCog, faSignOutAlt)
 
 class App extends Component {
     state = {
-        surveys: [
-            {
-                Poll_UUID: '24db357f-75e4-4e69-8b85-e1a1138d394c',
-                Name: 'Amazing Survey',
-                Created: 1558768782,
-                Questions: [
-                    {
-                        UUID: 'f79e760e-16db-4684-86db-844c6f40aa4f',
-                        question: 'How are You today?'
-                    }
-                ]
-            }
-        ],
+        user: null,
         error: false,
         loading: false,
         name: null,
         questions: []
-    };
-
-    componentDidMount() {
-        // TODO COMMENTED TO SAVE AWS FREE TIER
-        // axios.get('/polls')
-        //     .then(response => {
-        //         this.setState({
-        //             surveys: response.data.body
-        //         });
-        //     })
-        //     .catch(error => {
-        //         this.setState({error: true})
-        //     });
     }
 
-    seconds_since_epoch = () => { return Math.floor( Date.now() / 1000 ) };
+    seconds_since_epoch = () => {
+        return Math.floor(Date.now() / 1000)
+    }
 
     createSurvey = () => {
         this.setState({
             loading: true
-        });
+        })
         const newSurvey = {
             // Name: this.state.name,
             poll: {
@@ -64,9 +39,9 @@ class App extends Component {
                     }
                 ]
             }
-        };
+        }
 
-        console.log(newSurvey);
+        console.log(newSurvey)
         // TODO COMMENTED TO SAVE AWS FREE TIER
         // axios.post('/polls', newSurvey, {
         //     headers: {
@@ -75,31 +50,48 @@ class App extends Component {
         // })
         //     .then(
         //         (response) => {
-        //             console.log(response);
+        //             console.log(response)
         //             this.setState({
         //                 loading: false
-        //             });
+        //             })
         //         }
         //     )
         //     .catch(
         //         (error) => {
-        //             console.log(error);
+        //             console.log(error)
         //             this.setState({
         //                 loading: false
-        //             });
+        //             })
         //         }
         //     )
-    };
+    }
+
+    loginUserHandler = (user) => {
+        this.setState({
+            user: user
+        })
+    }
+
+    logoutHandler = () => {
+        this.setState({
+            user: null
+        })
+    }
 
     render() {
+        let view = <PublicView userLoginHandler={this.loginUserHandler}/>
+
+        if (this.state.user != null) {
+            view = <PrivateView user={this.state.user} logoutHandler={this.logoutHandler}/>
+        }
         return (
-            <div className="App">
-                <Navbar/>
-                <Surveys surveys={this.state.surveys}/>
-                <SurveyForm/>
-            </div>
-        );
+            <BrowserRouter>
+                <div className="App">
+                    {view}
+                </div>
+            </BrowserRouter>
+        )
     }
 }
 
-export default App;
+export default App

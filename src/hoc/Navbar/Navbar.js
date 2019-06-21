@@ -7,7 +7,7 @@ const navbar = (props) => {
     return (
         <div className={cssClasses.Navbar}>
             <img className={cssClasses.logo} src={Logo}/>
-            <Account/>
+            <Account user={props.user} logoutHandler={props.logoutHandler}/>
         </div>
     );
 };

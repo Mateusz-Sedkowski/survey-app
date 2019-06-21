@@ -22,7 +22,7 @@ class Account extends Component {
                     <li><FontAwesomeIcon icon="file-signature" className={cssClasses.itemIcon}/> <p> My Surveys </p>
                     </li>
                     <li><FontAwesomeIcon icon="cog" className={cssClasses.itemIcon}/> <p> Account Settings</p></li>
-                    <li><FontAwesomeIcon icon="sign-out-alt" className={cssClasses.itemIcon}/> <p> Log out</p></li>
+                    <li onClick={this.props.logoutHandler}><FontAwesomeIcon icon="sign-out-alt" className={cssClasses.itemIcon}/> <p> Log out</p></li>
                 </ul>
             </div>
         }
@@ -30,7 +30,7 @@ class Account extends Component {
             <div className={cssClasses.Account}>
                 <div className={cssClasses.UserData} onClick={this.toggleMenu}>
                     <img className={cssClasses.avatar} src={AvatarPlaceholder}/>
-                    <p className={cssClasses.name}> Mateusz Sędkowski </p>
+                    <p className={cssClasses.name}> {this.props.user.first_name + ' ' + this.props.user.last_name} </p>
                     <FontAwesomeIcon icon="caret-down" className={cssClasses.icon}/>
                 </div>
 

@@ -1,26 +1,57 @@
-import React, { Component } from 'react'
-import cssClasses from './LoginControls.css'
+import React, {Component} from 'react'
+import cssClasses from './Login.css'
+import {Auth} from 'aws-amplify'
 
-class LoginControls extends Component {
-    render () {
+class Login extends Component {
+    state = {
+        email: '',
+        password: '',
+        isLoading: false
+    }
+
+    handleChange = event => {
+        this.setState({
+            [event.target.name]: event.target.value
+        })
+    }
+
+    logInHandler = async event => {
+        event.preventDefault();
+
+        this.setState({isLoading: true});
+
+        try {
+            const userData = await Auth.signIn(this.state.email, this.state.password)
+            const user = {
+                first_name: userData.attributes.name,
+                last_name: userData.attributes.given_name
+            }
+            this.props.userLoginHandler(user)
+        } catch (e) {
+            console.log(e.message); //TODO REMOVE AT END
+            this.setState({isLoading: false});
+        }
+    }
+
+    render() {
         return (
             <div className={cssClasses.LoginControls}>
                 <div className={cssClasses.Controls}>
                     <h1> Log in </h1>
                     <label>Email: </label>
-                    <input/>
+                    <input type='email' name='email' onChange={this.handleChange}/>
                     <div className={cssClasses.PasswordLabels}>
                         <label>Password: </label>
-                        <label
+                        <a
                             className={cssClasses.ForgotPassword}
-                            onClick={this.props.remindPassword}>Forgot password</label>
+                            href='/remindPassword'>Forgot password</a>
                     </div>
-                    <input/>
+                    <input type='password' name='password' onChange={this.handleChange}/>
                     <div className={cssClasses.FormActions}>
-                        <label
+                        <a
                             className={cssClasses.SignIn}
-                            onClick={this.props.signUp}>Sign in</label>
-                        <button onClick={this.props.submitHandle}>Log in</button>
+                            href='/register'>Sign in</a>
+                        <button onClick={this.logInHandler}>Log in</button>
                     </div>
                 </div>
             </div>
@@ -28,4 +59,4 @@ class LoginControls extends Component {
     }
 }
 
-export default LoginControls;
+export default Login;

@@ -5,7 +5,7 @@ import cssClasses from './Surveys.css'
 const surveys = (props) => {
     return (
         <div className={cssClasses.Surveys}>
-        {props.surveys.map((survey) => {
+            {props.surveys.map((survey) => {
                 return (
                     <Survey
                         key={survey.Poll_UUID}

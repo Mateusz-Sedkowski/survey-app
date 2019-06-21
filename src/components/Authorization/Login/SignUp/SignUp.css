@@ -47,7 +47,8 @@
     box-shadow: #0D2D57 1px 1px;
 }
 
-.Controls label {
+.Controls label,
+.Controls a {
     font-family: Asap, sans-serif;
     font-style: normal;
     font-weight: normal;
@@ -68,6 +69,7 @@
 
 .Controls .FormActions .LogIn {
     align-self: flex-start;
+    text-decoration: none;
     cursor: pointer;
     font-weight: 500;
     color: #0D2D57;
