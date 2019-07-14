@@ -4,10 +4,8 @@ import {BrowserRouter} from 'react-router-dom'
 // import axios from './axios-orders'
 import PublicView from './hoc/PublicView/PublicView'
 import PrivateView from './hoc/PrivateView/PrivateView'
-import {library} from '@fortawesome/fontawesome-svg-core'
-import {faCaretDown, faFileSignature, faCog, faSignOutAlt} from '@fortawesome/free-solid-svg-icons'
+import {Auth} from "aws-amplify";
 
-library.add(faCaretDown, faFileSignature, faCog, faSignOutAlt)
 
 class App extends Component {
     state = {
@@ -72,10 +70,16 @@ class App extends Component {
         })
     }
 
-    logoutHandler = () => {
-        this.setState({
-            user: null
-        })
+    logoutHandler = async event => {
+        event.preventDefault();
+
+        try {
+            await Auth.signOut()
+            this.setState({ user: null })
+        } catch (e) {
+            console.log(e.message); //TODO REMOVE AT END
+            this.setState({isLoading: false});
+        }
     }
 
     render() {

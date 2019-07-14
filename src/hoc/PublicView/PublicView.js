@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import cssClasses from "./PublicView.css"
+import "./PublicView.css"
 import Authorization from "../../components/Authorization/Authorization"
 
 class PublicView extends Component {
@@ -9,9 +9,9 @@ class PublicView extends Component {
 
     render() {
         return (
-            <div className={cssClasses.PublicView}>
+            <div className="PublicView">
                 <Authorization userLoginHandler={this.props.userLoginHandler}/>
-                <div className={cssClasses.Image}/>
+                <div className="Image"/>
             </div>
         )
     }

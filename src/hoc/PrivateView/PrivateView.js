@@ -1,14 +1,17 @@
 import React, {Component} from 'react';
 import Navbar from '../Navbar/Navbar'
 import Surveys from '../../containers/Surveys/Surveys'
+import './PrivateView.css'
 import SurveyForm from '../../forms/Survey/NewSurvey'
 import Amplify, {API, Auth} from 'aws-amplify'
 
-Amplify.Logger.LOG_LEVEL = 'DEBUG';
+// Amplify.Logger.LOG_LEVEL = 'DEBUG';
 
 class PrivateView extends Component {
     state = {
-        surveys: []
+        surveys: [],
+        error: false,
+        loading: true,
     }
 
     componentDidMount() {
@@ -35,13 +38,12 @@ class PrivateView extends Component {
                 ]
             }
         })
-        // TODO COMMENT TO SAVE AWS FREE TIER
         API.get('opinionPollApi', '/polls')
             .then(response => {
                 this.setState({
-                    surveys: response.body
+                    surveys: response.body,
+                    loading: false
                 })
-                console.log(response)
             })
             .catch(error => {
                 this.setState({error: true})
@@ -50,11 +52,19 @@ class PrivateView extends Component {
     }
 
     render() {
+        let surveys = null;
+        if (this.state.surveys.length) {
+            surveys = <Surveys surveys={this.state.surveys}/>
+        }
+
         return (
             <div>
                 <Navbar user={this.props.user} logoutHandler={this.props.logoutHandler}/>
-                <Surveys surveys={this.state.surveys}/>
-                <SurveyForm/>
+                <div className="mainContent">
+                    <h1>Available Surveys</h1>
+                    {surveys}
+                </div>
+                {/*<SurveyForm/>*/}
             </div>
         );
     }

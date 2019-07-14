@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import cssClasses from './Login.css'
+import './Login.css'
 import {Auth} from 'aws-amplify'
 
 class Login extends Component {
@@ -35,21 +35,21 @@ class Login extends Component {
 
     render() {
         return (
-            <div className={cssClasses.LoginControls}>
-                <div className={cssClasses.Controls}>
+            <div className="LoginControls">
+                <div className="Controls">
                     <h1> Log in </h1>
                     <label>Email: </label>
                     <input type='email' name='email' onChange={this.handleChange}/>
-                    <div className={cssClasses.PasswordLabels}>
+                    <div className="PasswordLabels">
                         <label>Password: </label>
                         <a
-                            className={cssClasses.ForgotPassword}
+                            className="ForgotPassword"
                             href='/remindPassword'>Forgot password</a>
                     </div>
                     <input type='password' name='password' onChange={this.handleChange}/>
-                    <div className={cssClasses.FormActions}>
+                    <div className="FormActions">
                         <a
-                            className={cssClasses.SignIn}
+                            className="SignIn"
                             href='/register'>Sign in</a>
                         <button onClick={this.logInHandler}>Log in</button>
                     </div>

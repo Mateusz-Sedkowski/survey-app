@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import cssClasses from './SignUp.css'
+import './SignUp.css'
 import {Auth} from "aws-amplify";
 
 class SignUp extends Component {
@@ -48,8 +48,8 @@ class SignUp extends Component {
 
     render () {
         return (
-            <div className={cssClasses.SignUp}>
-                <div className={cssClasses.Controls}>
+            <div className="SignUp">
+                <div className="Controls">
                     <h1> Create Account </h1>
                     <label>First Name: </label>
                     <input name='firstName' onChange={this.handleChange}/>
@@ -61,9 +61,9 @@ class SignUp extends Component {
                     <input name='phone' onChange={this.handleChange}/>
                     <label>Password: </label>
                     <input type='password' name='password' onChange={this.handleChange}/>
-                    <div className={cssClasses.FormActions}>
+                    <div className="FormActions">
                         <a
-                            className={cssClasses.LogIn}
+                            className="LogIn"
                             href='/'>Already have an account?</a>
                         <button onClick={this.signUpHandler}>Sign Up</button>
                     </div>
