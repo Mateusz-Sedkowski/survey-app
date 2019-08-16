@@ -3,7 +3,7 @@ import './App.css'
 import {BrowserRouter} from 'react-router-dom'
 import PublicView from './hoc/PublicView/PublicView'
 import PrivateView from './hoc/PrivateView/PrivateView'
-import {Auth} from "aws-amplify";
+import {Auth} from "aws-amplify"
 
 
 class App extends Component {
@@ -56,23 +56,23 @@ class App extends Component {
 
     logoutHandler = event => {
         event.preventDefault();
-
-        try {
-            Auth.signOut().then( event => {
-                this.setState({
-                    user: null,
-                    loggedIn: false
-                })
+        Auth.signOut().then( data => {
+            console.log('Event', data)
+            this.setState({
+                user: null,
+                loggedIn: false
             })
-        } catch (e) {
-            console.log(e.message); //TODO REMOVE AT END
-            this.setState({isLoading: false});
-        }
+        })
     }
 
     checkUserSession = _ => {
         Auth.currentSession().then(event => {
-            console.log("Fulfilled", event)
+            console.log("Fulfilled", event.accessToken.payload)
+            this.setState({
+                user: {
+                    role: event.accessToken.payload['cognito:groups'][0]
+                }
+            })
             this.setUserCredentials()
         }, event => {
             console.log('Rejected', event)
@@ -86,12 +86,11 @@ class App extends Component {
         Auth.currentAuthenticatedUser({
             bypassCache: false
         }).then(user => {
+            console.log("User", user)
+            const userDetails = { ...this.state.user, first_name: user.attributes.name, last_name: user.attributes.given_name }
             this.setState({
                 loggedIn: true,
-                user: {
-                    first_name: user.attributes.name,
-                    last_name: user.attributes.given_name
-                }
+                user: userDetails
             })
         })
     }
