@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import './App.css'
 import {BrowserRouter} from 'react-router-dom'
-// import axios from './axios-orders'
 import PublicView from './hoc/PublicView/PublicView'
 import PrivateView from './hoc/PrivateView/PrivateView'
 import {Auth} from "aws-amplify";
@@ -13,7 +12,13 @@ class App extends Component {
         error: false,
         loading: false,
         name: null,
-        questions: []
+        questions: [],
+        loggedIn: false
+    }
+
+    constructor(props) {
+        super(props)
+        this.checkUserSession()
     }
 
     seconds_since_epoch = () => {
@@ -40,58 +45,63 @@ class App extends Component {
         }
 
         console.log(newSurvey)
-        // TODO COMMENTED TO SAVE AWS FREE TIER
-        // axios.post('/polls', newSurvey, {
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     }
-        // })
-        //     .then(
-        //         (response) => {
-        //             console.log(response)
-        //             this.setState({
-        //                 loading: false
-        //             })
-        //         }
-        //     )
-        //     .catch(
-        //         (error) => {
-        //             console.log(error)
-        //             this.setState({
-        //                 loading: false
-        //             })
-        //         }
-        //     )
     }
 
     loginUserHandler = (user) => {
         this.setState({
-            user: user
+            user: user,
+            loggedIn: true
         })
     }
 
-    logoutHandler = async event => {
+    logoutHandler = event => {
         event.preventDefault();
 
         try {
-            await Auth.signOut()
-            this.setState({ user: null })
+            Auth.signOut().then( event => {
+                this.setState({
+                    user: null,
+                    loggedIn: false
+                })
+            })
         } catch (e) {
             console.log(e.message); //TODO REMOVE AT END
             this.setState({isLoading: false});
         }
     }
 
-    render() {
-        let view = <PublicView userLoginHandler={this.loginUserHandler}/>
+    checkUserSession = _ => {
+        Auth.currentSession().then(event => {
+            console.log("Fulfilled", event)
+            this.setUserCredentials()
+        }, event => {
+            console.log('Rejected', event)
+            this.setState({
+                loggedIn: false
+            })
+        })
+    }
 
-        if (this.state.user != null) {
-            view = <PrivateView user={this.state.user} logoutHandler={this.logoutHandler}/>
-        }
+    setUserCredentials = _ => {
+        Auth.currentAuthenticatedUser({
+            bypassCache: false
+        }).then(user => {
+            this.setState({
+                loggedIn: true,
+                user: {
+                    first_name: user.attributes.name,
+                    last_name: user.attributes.given_name
+                }
+            })
+        })
+    }
+
+    render() {
         return (
             <BrowserRouter>
                 <div className="App">
-                    {view}
+                    {this.state.loggedIn ? <PrivateView user={this.state.user} logoutHandler={this.logoutHandler}/>
+                    : <PublicView userLoginHandler={this.loginUserHandler}/>}
                 </div>
             </BrowserRouter>
         )

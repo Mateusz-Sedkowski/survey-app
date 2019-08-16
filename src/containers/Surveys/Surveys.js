@@ -65,33 +65,6 @@ const surveys = (props) => {
             hover
             data={data}
         />
-        // <div className={cssClasses.Surveys}>
-        //     <table>
-        //         <thead>
-        //         <tr>
-        //             <th></th>
-        //             <th>Name</th>
-        //             <th>Description</th>
-        //             <th>Questions count</th>
-        //             <th>Created at</th>
-        //         </tr>
-        //         </thead>
-        //         <tbody>
-        //     {props.surveys.map((survey) => {
-        //         return (
-        //             <Survey
-        //                 key={survey.Poll_UUID}
-        //                 icon={survey.Icon}
-        //                 name={survey.Name}
-        //                 description={survey.Description}
-        //                 created={survey.Created}
-        //                 questions={survey.Questions}
-        //             />
-        //         )
-        //     })}
-        //         </tbody>
-        //     </table>
-        // </div>
     )
 }
 

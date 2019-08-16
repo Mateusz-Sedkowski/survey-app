@@ -3,10 +3,6 @@ import "./PublicView.css"
 import Authorization from "../../components/Authorization/Authorization"
 
 class PublicView extends Component {
-    componentWillUpdate(prevProps, prevState, snapshot) {
-
-    }
-
     render() {
         return (
             <div className="PublicView">
