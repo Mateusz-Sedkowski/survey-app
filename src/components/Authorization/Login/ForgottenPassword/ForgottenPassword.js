@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import "./ForgottenPassword.css"
-import {Auth} from "aws-amplify";
+import {Auth} from "aws-amplify"
+import {Link} from 'react-router-dom'
 
 class ForgottenPassword extends Component {
     state = {
@@ -38,9 +39,9 @@ class ForgottenPassword extends Component {
                     <label>Email: </label>
                     <input type='email' name='username' onChange={this.handleChange}/>
                     <div className="FormActions">
-                        <a
+                        <Link
                             className="LogIn"
-                            href='/'>Return to login</a>
+                            to='/'>Return to login</Link>
                         <button onClick={this.signUpHandler}>Reset password</button>
                     </div>
                 </div>

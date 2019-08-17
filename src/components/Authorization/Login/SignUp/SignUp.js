@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './SignUp.css'
-import {Auth} from "aws-amplify";
+import {Auth} from "aws-amplify"
+import {Link} from 'react-router-dom'
 
 class SignUp extends Component {
     state = {
@@ -62,9 +63,9 @@ class SignUp extends Component {
                     <label>Password: </label>
                     <input type='password' name='password' onChange={this.handleChange}/>
                     <div className="FormActions">
-                        <a
+                        <Link
                             className="LogIn"
-                            href='/'>Already have an account?</a>
+                            to='/'>Already have an account?</Link>
                         <button onClick={this.signUpHandler}>Sign Up</button>
                     </div>
                 </div>

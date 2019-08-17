@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import './Login.css'
 import {Auth} from 'aws-amplify'
+import {Link} from 'react-router-dom'
 
 class Login extends Component {
     state = {
@@ -42,15 +43,15 @@ class Login extends Component {
                     <input type='email' name='email' onChange={this.handleChange}/>
                     <div className="PasswordLabels">
                         <label>Password: </label>
-                        <a
+                        <Link
                             className="ForgotPassword"
-                            href='/remindPassword'>Forgot password</a>
+                            to='/remindPassword'>Forgot password</Link>
                     </div>
                     <input type='password' name='password' onChange={this.handleChange}/>
                     <div className="FormActions">
-                        <a
+                        <Link
                             className="SignIn"
-                            href='/register'>Sign in</a>
+                            to='/register'>Sign in</Link>
                         <button onClick={this.logInHandler}>Log in</button>
                     </div>
                 </div>
