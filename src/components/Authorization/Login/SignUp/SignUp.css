@@ -15,6 +15,10 @@
     margin: auto;
 }
 
+.SignUp .Controls form {
+    width: 100%;
+}
+
 .Controls h1 {
     font-family: Asap, sans-serif;
     font-style: normal;
@@ -24,30 +28,36 @@
     color: #495460;
 }
 
-.Controls input {
+.Controls .form-group {
+    width: 100%;
+    text-align: start;
+    margin-bottom: 15px;
+}
+
+.Controls form .form-group input {
     width: 100%;
     height: 45px;
     background: #FFFFFF;
     border: 1px solid #495460;
     box-sizing: border-box;
     border-radius: 5px;
-    margin-bottom: 20px;
     padding: 15px;
     font-family: Asap, sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
     line-height: 25px;
+    margin-bottom: 0;
 }
 
-.Controls input:focus {
+.Controls form .form-group input:focus {
     outline: none !important;
     border: 1px solid #0D2D57;
     box-shadow: #0D2D57 1px 1px;
 }
 
-.Controls label,
-.Controls a {
+.Controls form .form-group label,
+.Controls form .form-group a {
     font-family: Asap, sans-serif;
     font-style: normal;
     font-weight: normal;
@@ -55,6 +65,7 @@
     line-height: 15px;
     color: #495460;
     margin-bottom: 5px;
+    margin-left: 10px;
 }
 
 .Controls .FormActions {
@@ -72,6 +83,7 @@
     cursor: pointer;
     font-weight: 500;
     color: #0D2D57;
+    margin-left: 0;
 }
 
 .Controls .FormActions button {
@@ -87,4 +99,31 @@
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
+}
+
+.genderSelect {
+    width: 100%;
+    height: 45px;
+    background: transparent;
+    font-family: Asap, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 25px;
+    border: 1px solid #0D2D57;
+}
+
+.genderSelect:focus {
+    outline: none !important;
+    border: 1px solid #0D2D57;
+    box-shadow: #0D2D57 1px 1px;
+}
+
+.Controls form .form-group .errorMessage {
+    color: #D03229;
+    font-family: Asap, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    margin-left: 10px;
 }
