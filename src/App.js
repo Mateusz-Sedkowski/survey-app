@@ -57,7 +57,6 @@ class App extends Component {
     logoutHandler = event => {
         event.preventDefault();
         Auth.signOut().then( data => {
-            console.log('Event', data)
             this.setState({
                 user: null,
                 loggedIn: false
@@ -87,10 +86,13 @@ class App extends Component {
             bypassCache: false
         }).then(user => {
             console.log("User", user)
-            const userDetails = { ...this.state.user, first_name: user.attributes.name, last_name: user.attributes.given_name }
             this.setState({
                 loggedIn: true,
-                user: userDetails
+                user: {
+                    ...this.state.user,
+                    first_name: user.attributes.name,
+                    last_name: user.attributes.given_name
+                }
             })
         })
     }

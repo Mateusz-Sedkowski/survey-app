@@ -1,24 +1,50 @@
-import React from 'react';
-// import Questions from '../../Questions/Questions';
-import cssClasses from './Survey.css';
+import React, {Component} from 'react'
+import cssClasses from './Survey.css'
+import {API} from "aws-amplify";
 
-const survey = (props) => {
-    const date = new Date(Number(props.created) * 1000);
+class Survey extends Component {
+    state = {
+        survey: null,
+        error: false,
+        loading: true,
+    }
 
-    return (
-        <tr>
-            <td> {props.icon ? <img src={props.icon} width="40px" height="40px"/> : null} </td>
-            <td> {props.name} </td>
-            <td> {props.description} </td>
-            <td> {props.questions ? props.questions.length : 0} </td>
-            <td> {date.toLocaleString()} </td>
-            {/*<div className={cssClasses.Title}>*/}
-            {/*    <p>Survey Name: {props.name}</p>*/}
-            {/*    <p>Created: {date.toLocaleString()}</p>*/}
-            {/*</div>*/}
-            {/*<Questions questionsList={props.questions}/>*/}
-        </tr>
-    );
-};
+    componentDidMount() {
+        API.get('opinionPollApi', `${this.props.location.pathname}`)
+            .then(response => {
+                console.log("Surveys", response)
+                this.setState({
+                    survey: response.body,
+                    loading: false
+                })
+                console.log(this.state)
+            })
+            .catch(error => {
+                this.setState({error: true})
+                console.log(error)
+            })
+    }
 
-export default survey;
+    render() {
+        let survey = null
+        if (this.state.survey) {
+            console.log("Survey?")
+            survey = (<div>
+                <h3> {this.state.survey.Name} </h3>
+                {this.state.survey.Icon ? <img src={this.state.survey.Icon} width="40px" height="40px"/> : null}
+                <p> {this.state.survey.Description} </p>
+                {/*/!*<td> {props.questions ? props.questions.length : 0} </td>*!/*/}
+                <p> {this.state.survey.Expiry} </p>
+            </div>)
+        }
+
+        return (
+            <div>
+                <h1>Survey Details</h1>
+                {survey}
+            </div>
+        )
+    }
+}
+
+export default Survey

@@ -5,15 +5,18 @@ import IosCogOutline from 'react-ionicons/lib/IosCogOutline'
 import IosLogOut from 'react-ionicons/lib/IosLogOut'
 import IosClipboardOutline from 'react-ionicons/lib/IosClipboardOutline'
 import IosArrowDown from 'react-ionicons/lib/IosArrowDown'
+import { Link } from 'react-router-dom'
 
 const USER_MENU_OPTIONS = [
     {
-        name: 'My Surveys',
-        icon: <IosClipboardOutline className="icon" color="#FFFFFF" fontSize="20px"/>
+        name: 'Available Surveys',
+        icon: <IosClipboardOutline className="icon" color="#FFFFFF" fontSize="20px"/>,
+        path: '/'
     },
     {
         name: 'Account Settings',
-        icon: <IosCogOutline className="icon" color="#FFFFFF" fontSize="20px"/>
+        icon: <IosCogOutline className="icon" color="#FFFFFF" fontSize="20px"/>,
+        path: '/settings'
     }
 ]
 
@@ -24,15 +27,18 @@ class Account extends Component {
     }
 
     componentDidMount() {
-        if(this.state.user.role === 'pollster') {
+        // if(this.state.user.role === 'pollster') { TODO Uncomment after creating all and styling all components
+        if(this.state.user.role === 'interviewee') {
             USER_MENU_OPTIONS.push(
                 {
                     name: 'Create New Poll',
-                    icon: <IosCogOutline className="icon" color="#FFFFFF" fontSize="20px"/>
+                    icon: <IosCogOutline className="icon" color="#FFFFFF" fontSize="20px"/>,
+                    path: '/polls/new'
                 },
                 {
                     name: 'Reports',
-                    icon: <IosCogOutline className="icon" color="#FFFFFF" fontSize="20px"/>
+                    icon: <IosCogOutline className="icon" color="#FFFFFF" fontSize="20px"/>,
+                    path: '/reports'
                 }
             )
         }
@@ -50,7 +56,7 @@ class Account extends Component {
             accountMenu = <div className="AccountMenu">
                 <ul>
                     { USER_MENU_OPTIONS.map((option, i) => {
-                        return <li key={i}>{option.icon}<span>{option.name}</span></li>
+                        return <li key={i}>{option.icon}<Link to={option.path}>{option.name}</Link></li>
                     }) }
                     <li onClick={this.props.logoutHandler}><IosLogOut className="icon" color="#FFFFFF" fontSize="20px"/>
                         <span> Log out</span></li>

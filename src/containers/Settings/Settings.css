@@ -1,0 +1,15 @@
+.Settings {
+
+}
+
+.SubmitButton {
+    background-color: #ffc107;
+    margin: 10px 20px 20px 0;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 5px;
+    box-shadow: lightgray 1px 1px;
+    cursor: pointer;
+    align-self: flex-end;
+}

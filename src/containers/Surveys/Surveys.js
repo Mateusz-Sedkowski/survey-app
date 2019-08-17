@@ -1,6 +1,6 @@
 import React from 'react'
-import Survey from './Survey/Survey'
 import { MDBDataTable } from 'mdbreact';
+import {Link} from "react-router-dom";
 
 const surveys = (props) => {
     const changeEpochToTime = (epoch) => {
@@ -17,7 +17,8 @@ const surveys = (props) => {
             name: survey.Name,
             description: survey.Description,
             questionsCount: survey.Questions ? survey.Questions.length : 0,
-            created: changeEpochToTime(survey.Created)
+            created: changeEpochToTime(survey.Created),
+            details: <Link to={`/polls/${survey.Poll_UUID}`}>View</Link>
         }
     })
 
@@ -52,6 +53,12 @@ const surveys = (props) => {
                 field: 'created',
                 sort: 'asc',
                 width: 100
+            },
+            {
+                label: '',
+                field: 'details',
+                sort: 'asc',
+                width: 80
             }
         ],
         rows: rows
