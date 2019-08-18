@@ -3,17 +3,11 @@ import './SignUp.css'
 import {Auth} from "aws-amplify"
 import {Link, withRouter} from 'react-router-dom'
 import {Formik, Form, Field, ErrorMessage} from 'formik'
+import DatePicker from "react-datepicker/es";
 
 class SignUp extends Component {
     state = {
         user: {
-            first_name: '',
-            last_name: '',
-            email: '',
-            phone: null,
-            password: '',
-            gender: 'Female',
-            birthdate: '17-04-1993',
             address: 'Rojna 50c/80',
         },
         isLoading: false
@@ -37,7 +31,7 @@ class SignUp extends Component {
                 name: values.first_name,
                 given_name: values.last_name,
                 gender: values.gender,
-                birthdate: user.birthdate,
+                birthdate: values.birthdate,
                 address: user.address
             }
         }).then(_ => {
@@ -60,20 +54,39 @@ class SignUp extends Component {
                                 first_name: '',
                                 last_name: '',
                                 email: '',
-                                gender: null,
+                                gender: '',
+                                birthdate: '',
                                 phone: '',
                                 password: ''
                             }
                         }
                         validate={values => {
                             let errors = {};
-                            if (!values.email) {
-                                errors.email = 'This field is required.';
-                            } else if (
-                                !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-                            ) {
-                                errors.email = 'Invalid email address.';
-                            }
+                            Object.keys(values).map( (key) => {
+                                if(!values[key] || values[key] === '') {
+                                    errors[key] = 'This field is required.'
+                                } else if ( key === 'email' &&
+                                    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+                                ) {
+                                    errors.email = 'Invalid email address.';
+                                } else if ( key === 'password') {
+                                    if ( !/^(?=.*[a-z])/i.test(values.password) ) {
+                                        errors.password = 'Password should contain at least one lowercase letter'
+                                    } else if ( !/^(?=.*[A-Z])/i.test(values.password) ) {
+                                        errors.password = 'Password should contain at least one uppercase letter'
+                                    } else if ( !/^(?=.*[0-9])/i.test(values.password) ) {
+                                        errors.password = 'Password should contain at least one numeric character'
+                                    } else if ( !/^(?=.*[!@#\$%\^&])/i.test(values.password) ) {
+                                        errors.password = 'Password should contain at least one special character'
+                                    } else if ( !/^(?=.{8,})/i.test(values.password) ) {
+                                        errors.password = 'Password should be at least 8 sign long'
+                                    }
+                                } else if ( key === 'phone') {
+                                    if ( !/^[+]?[\s./0-9]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/g.test(values.phone)) {
+                                        errors.phone = 'Invalid phone format.'
+                                    }
+                                }
+                            })
                             return errors;
                         }}
                         onSubmit={(values) => this.signUpHandler(values)}
@@ -106,6 +119,20 @@ class SignUp extends Component {
                                         <option value="men">Men</option>
                                         <option value="women">Women</option>
                                     </Field>
+                                </div>
+                                <div className='form-group'>
+                                    <label>Date of Birth</label>
+                                    {/*<Field render={() => <DatePicker maxDate={Date.now()}*/}
+                                    {/*                                 peekNextMonth*/}
+                                    {/*                                 showMonthDropdown*/}
+                                    {/*                                 showYearDropdown*/}
+                                    {/*                                 dropdownMode="select"/>}*/}
+                                    {/*       name="birthdate"*/}
+                                    {/*       className='dobField'/>*/}
+                                    <Field component={DatePicker}
+                                           name="birthdate"
+                                           className='dobField'/>
+                                    <ErrorMessage name="birthdate" component="div" className='errorMessage'/>
                                 </div>
                                 <div className='form-group'>
                                     <label>Password </label>
