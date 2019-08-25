@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import './App.css'
-import {BrowserRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import PublicView from './hoc/PublicView/PublicView'
 import PrivateView from './hoc/PrivateView/PrivateView'
 import {Auth} from "aws-amplify"
@@ -16,8 +16,7 @@ class App extends Component {
         loggedIn: false
     }
 
-    constructor(props) {
-        super(props)
+    componentDidMount() {
         this.checkUserSession()
     }
 
@@ -43,7 +42,6 @@ class App extends Component {
                 ]
             }
         }
-
         console.log(newSurvey)
     }
 
@@ -61,6 +59,7 @@ class App extends Component {
                 user: null,
                 loggedIn: false
             })
+            this.props.history.push('/')
         })
     }
 
@@ -99,14 +98,12 @@ class App extends Component {
 
     render() {
         return (
-            <BrowserRouter>
                 <div className="App">
                     {this.state.loggedIn ? <PrivateView user={this.state.user} logoutHandler={this.logoutHandler}/>
                     : <PublicView userLoginHandler={this.loginUserHandler}/>}
                 </div>
-            </BrowserRouter>
         )
     }
 }
 
-export default App
+export default withRouter(App)

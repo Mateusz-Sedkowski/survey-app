@@ -9,24 +9,22 @@ class Login extends Component {
         isLoading: false
     }
 
-    handleChange = event => {
-        this.setState({
-            [event.target.name]: event.target.value
-        })
-    }
-
     logInHandler = async values => {
         this.setState({isLoading: true});
         try {
-            const userData = await Auth.signIn(values.email, values.password)
-            const user = {
-                first_name: userData.attributes.name,
-                last_name: userData.attributes.given_name
+            await Auth.signIn(values.email, values.password).then(user => {
+            console.log("User after login", user.attributes)
+            const userData = {
+                first_name: user.attributes.name,
+                last_name: user.attributes.given_name
             }
-            this.props.userLoginHandler(user)
-        } catch (e) {
-            console.log(e.message); //TODO REMOVE AT END
-            this.setState({isLoading: false});
+            this.props.userLoginHandler(userData)
+            this.setState({isLoading: false})
+        }, error => {
+            console.log(error.message) //TODO REMOVE AT END
+        }) }
+        catch {
+
         }
     }
 

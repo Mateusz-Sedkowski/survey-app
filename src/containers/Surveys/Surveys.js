@@ -28,37 +28,55 @@ const surveys = (props) => {
                 label: '',
                 field: 'icon',
                 sort: 'asc',
-                width: 60
+                width: 60,
+                attributes: {
+                    'id': 'icon-column'
+                }
             },
             {
                 label: 'Name',
                 field: 'name',
                 sort: 'asc',
-                width: 250
+                width: 300,
+                attributes: {
+                    'id': 'name-column'
+                }
             },
             {
                 label: 'Description',
                 field: 'description',
                 sort: 'asc',
-                width: 250
+                width: 300,
+                attributes: {
+                    'id': 'description-column'
+                }
             },
             {
-                label: 'Questions count',
+                label: '# of Questions',
                 field: 'questionsCount',
                 sort: 'asc',
-                width: 60
+                width: 60,
+                attributes: {
+                    'id': 'questions-count-column'
+                }
             },
             {
                 label: 'Created at',
                 field: 'created',
                 sort: 'asc',
-                width: 100
+                width: 150,
+                attributes: {
+                    'id': 'created-at-column'
+                }
             },
             {
                 label: '',
                 field: 'details',
                 sort: 'asc',
-                width: 80
+                width: 80,
+                attributes: {
+                    'id': 'details-column'
+                }
             }
         ],
         rows: rows
@@ -66,7 +84,7 @@ const surveys = (props) => {
     return (
         <MDBDataTable
             className='surveysTable'
-            fixed={true}
+            // fixed={true}
             striped
             bordered
             hover
