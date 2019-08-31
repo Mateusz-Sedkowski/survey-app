@@ -33,13 +33,13 @@ class SignUp extends Component {
     }
 
     signUpHandler = async values => {
-        this.setState({isLoading: true});
-        let user = this.state.user
-        await Auth.signUp({
-            username: values.email,
-            password: values.password,
-            attributes: {
-                email: values.email,
+                    this.setState({isLoading: true});
+                    let user = this.state.user
+                    await Auth.signUp({
+                        username: values.email,
+                        password: values.password,
+                        attributes: {
+                            email: values.email,
                 phone_number: values.phone,
                 name: values.first_name,
                 given_name: values.last_name,
