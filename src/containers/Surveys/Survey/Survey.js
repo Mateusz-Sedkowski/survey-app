@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import cssClasses from './Survey.css'
-import {API, Auth} from "aws-amplify";
-import {Formik, ErrorMessage, Field, Form} from 'formik'
+import {API} from "aws-amplify";
+import {Formik, Field, Form} from 'formik'
 import classNames from "classnames"
 
 const InputFeedback = ({error}) =>
