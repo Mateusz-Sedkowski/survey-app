@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import Surveys from './Surveys'
-import Amplify, {API, Auth} from "aws-amplify"
+import {API} from "aws-amplify"
 
 class AvailableSurveys extends Component {
     state = {

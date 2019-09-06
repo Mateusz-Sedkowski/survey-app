@@ -1,29 +1,13 @@
 import React, { Component } from 'react'
-import Question from '../Question/NewQuestion'
-import cssClasses from './NewSurvey.css'
+import NewQuestions from '../Question/NewQuestions'
+import classes from './NewSurvey.module.scss'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import {ErrorMessage, Field, Form, Formik} from "formik"
 import {API, Storage} from "aws-amplify"
-import {PhotoPicker, S3Image} from "aws-amplify-react"
+import {S3Image} from "aws-amplify-react"
 
 const uuid = require('uuid/v4')
-// Amplify.Logger.LOG_LEVEL = 'DEBUG';
-
-const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-];
 
 class NewSurvey extends Component {
     state = {
@@ -32,12 +16,6 @@ class NewSurvey extends Component {
         icon: null,
         expiry: Date.now(),
         questions: []
-    }
-
-    handleDataChange = event => {
-        this.setState({
-            expiry: event
-        })
     }
 
     handleChange = event => {
@@ -51,22 +29,30 @@ class NewSurvey extends Component {
             return;
         }
         let file = e.target.files[0];
+        this.setState({
+            icon: file
+        })
+    }
+
+    createSurveyHandler = async (values) => {
+        let file = this.state.icon
         let type = file['type'].split('/')[1]
-        console.log("Type", type)
-        Storage.put(`${uuid()}.${type}`, file)
-            .then(response => {
-                console.log("Response", response)
-                this.setState({
-                    key: response['key']
+        await Storage.put(`${uuid()}.${type}`, file)
+            .then( async (response) => {
+                console.log("Response", response['key'])
+                await this.setState({
+                    icon: response['key']
                 })
             })
             .catch(error => console.log("Error", error))
-    }
 
-    createSurveyHandler = async () => {
         let myInit = {
             body: {
-                survey: this.state
+                survey: {
+                    ...values,
+                    icon: this.state.icon,
+                    created: Date.now()
+                }
             }
         }
         this.setState({isLoading: true});
@@ -81,20 +67,18 @@ class NewSurvey extends Component {
 
     render() {
         return (
-            <div className={cssClasses.NewSurvey}>
-                <h1>Create new Survey</h1>
+            <div className={classes.NewSurvey}>
+                <h1 className={classes.NewSurveyHeader}>Create new Survey</h1>
                 <Formik
                     initialValues={{}}
-                    validateOnChange={true}
-                    validateOnBlur={false}
                     validate={values => {
                         let errors = {}
                         console.log("Values", values)
                         return errors;
                     }}
-                    onSubmit={() => {
-                        console.log("State", this.state)
-                        this.createSurveyHandler()
+                    onSubmit={(values) => {
+                        console.log("Values bs", values)
+                        this.createSurveyHandler(values)
                     }}
                 >
                     {({
@@ -106,21 +90,28 @@ class NewSurvey extends Component {
                           touched,
                           isSubmitting
                       }) => (
-                        <Form>
+                        <Form className={classes.NewSurveyForm}>
                             <div className='form-group'>
                                 <label>Survey name: </label>
-                                <Field type='text' name="name" onChange={this.handleChange}/>
+                                <Field type='text' name="name" onChange={ val => {
+                                    this.handleChange(val)
+                                    setFieldValue("name", val.target.value)
+                                }}/>
                                 <ErrorMessage name="name" component="div" className='errorMessage'/>
                             </div>
                             <div className='form-group'>
                                 <label>Description: </label>
-                                <Field component='textarea' name="description" onChange={this.handleChange}/>
+                                <Field component='textarea' name="description" onChange={ val => {
+                                    this.handleChange(val)
+                                    setFieldValue("description", val.target.value);
+                                }}/>
                                 <ErrorMessage name="description" component="div" className='errorMessage'/>
                             </div>
                             <div className='form-group'>
-                                <S3Image imgKey={this.state.key} />
                                 <label>Icon: </label>
-                                <Field type='file' name="icon" accept="image/*" onChange={this.handleFileChange}/>
+                                <Field type='file' name="icon" accept="image/*" onChange={ val => {
+                                    this.handleFileChange(val)
+                                }}/>
                                 <ErrorMessage name="icon" component="div" className='errorMessage'/>
                             </div>
                             <div className='form-group'>
@@ -145,6 +136,15 @@ class NewSurvey extends Component {
                                 />
                                 <ErrorMessage name="expiry" component="div" className='errorMessage'/>
                             </div>
+                            <div className='form-group'>
+                                <Field name="question" render={() =>
+                                    <NewQuestions
+                                        setFieldValue={setFieldValue}
+                                        value={values.question}
+                                    />
+                                }/>
+                                <ErrorMessage name="question" component="div" className='errorMessage'/>
+                            </div>
                             <div className="FormActions">
                                 <button type="submit" disabled={isSubmitting}>
                                     Submit
@@ -153,9 +153,6 @@ class NewSurvey extends Component {
                         </Form>
                     )}
                 </Formik>
-                <Question/>
-                <Question/>
-                <Question/>
             </div>
         )
     }

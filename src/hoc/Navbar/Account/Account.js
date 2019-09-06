@@ -56,7 +56,7 @@ class Account extends Component {
             accountMenu = <div className="AccountMenu">
                 <ul>
                     { USER_MENU_OPTIONS.map((option, i) => {
-                        return <li key={i}>{option.icon}<Link to={option.path}>{option.name}</Link></li>
+                        return <li key={i} onClick={this.toggleMenu}>{option.icon}<Link to={option.path}>{option.name}</Link></li>
                     }) }
                     <li onClick={this.props.logoutHandler}><IosLogOut className="icon" color="#FFFFFF" fontSize="20px"/>
                         <span> Log out</span></li>
@@ -66,7 +66,7 @@ class Account extends Component {
         return (
             <div className="Account">
                 <div className="UserData" onClick={this.toggleMenu}>
-                    <img className="avatar" src={AvatarPlaceholder}/>
+                    <img className="avatar" src={AvatarPlaceholder} alt="User Avatar"/>
                     <span className="name"> {this.props.user.first_name + ' ' + this.props.user.last_name} </span>
                     <IosArrowDown className="icon" color="#FFFFFF" fontSize="20px"/>
                 </div>

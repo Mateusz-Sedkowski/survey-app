@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
-import cssClasses from './Survey.css'
 import {API} from "aws-amplify";
 import {Formik, Field, Form} from 'formik'
+import * as Yup from 'yup'
 import classNames from "classnames"
+import {S3Image} from "aws-amplify-react";
 
 const InputFeedback = ({error}) =>
     error ? <div className={classNames("input-feedback")}>{error}</div> : null;
@@ -54,7 +55,7 @@ const RadioButtonGroup = ({
             <fieldset>
                 <legend>{label}</legend>
                 {children}
-                <InputFeedback error={error}/>
+                {touched && <InputFeedback error={error}/>}
             </fieldset>
         </div>
     );
@@ -105,27 +106,22 @@ class Survey extends Component {
     render() {
         let survey = null
         if (this.state.survey) {
-            console.log("Survey?")
+            let initialValue = {}
+            let initialShape = {}
+            this.state.survey.Questions.forEach( question => {
+                initialValue[question['UUID']] = ''
+                initialShape[question['UUID']] = Yup.string().required('Select an answer.')
+            })
             survey = (<div>
                 <h3> {this.state.survey.Name} </h3>
-                {this.state.survey.Icon ? <img src={this.state.survey.Icon} width="40px" height="40px"/> : null}
+                {this.state.survey.Icon ? <S3Image imgKey={this.state.survey.Icon} alt="Survey icon"/> : null}
                 <p> {this.state.survey.Description} </p>
-                <p> Fill this survey until: {new Date(this.state.survey.Expiry * 1000).toLocaleString()} </p>
+                <p> Fill this survey until: { new Date(this.state.survey.Expiry).toLocaleDateString() } </p>
                 <h4>Survey Questions</h4>
                 <Formik
-                    initialValues={{}}
-                    validateOnChange={false}
-                    validateOnBlur={false}
-                    validate={values => {
-                        let errors = {};
-                        this.state.survey.Questions.map((question) => {
-                            if (!values[question.UUID] || values[question.UUID] === '') {
-                                errors[question.UUID] = 'This field is required.'
-                            }
-                        })
-                        return errors;
-                    }}
-                    onSubmit={(values) => {
+                    initialValues={initialValue}
+                    validationSchema={Yup.object().shape(initialShape)}
+                    onSubmit={values => {
                         const answers = Object.keys(values).map((key) => {
                            return {
                                 question: key,
@@ -146,22 +142,24 @@ class Survey extends Component {
                       }) => (
                         <Form>
                             <div className='form-group'>
-                                {this.state.survey.Questions.map(question => {
+                                {this.state.survey.Questions.map((question, questionIndex) => {
                                     return (
                                         <RadioButtonGroup
                                             id={question.UUID}
-                                            label={question.question}
+                                            label={`Question #${questionIndex + 1}: ${question.question}`}
                                             value={values.question}
                                             error={errors[question.UUID]}
-                                            touched={touched.radioGroup}
+                                            touched={touched[question.UUID]}
+                                            key={questionIndex}
                                         >
-                                            {question.answers.map(answer => {
+                                            {question.answers.map((answer, answerIndex) => {
                                                 return (
                                                     <Field
                                                         component={RadioButton}
                                                         name={question.UUID}
                                                         id={answer.UUID}
-                                                        label={answer.value}
+                                                        label={answer.name}
+                                                        key={answerIndex}
                                                     />
                                                 )
                                             })}

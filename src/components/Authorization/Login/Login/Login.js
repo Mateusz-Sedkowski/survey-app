@@ -55,7 +55,7 @@ class Login extends Component {
                                 errors.password = 'Password should contain at least one uppercase letter'
                             } else if (!/^(?=.*[0-9])/i.test(values.password)) {
                                 errors.password = 'Password should contain at least one numeric character'
-                            } else if (!/^(?=.*[!@#\$%\^&])/i.test(values.password)) {
+                            } else if (!/^(?=.*[!@#$%^&])/i.test(values.password)) {
                                 errors.password = 'Password should contain at least one special character'
                             } else if (!/^(?=.{8,})/i.test(values.password)) {
                                 errors.password = 'Password should be at least 8 sign long'
