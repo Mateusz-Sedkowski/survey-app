@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import './SignUp.css'
 import {Auth} from "aws-amplify"
-import {Link, withRouter} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import {Formik, Form, Field, ErrorMessage} from 'formik'
 import DatePicker from "react-datepicker/es"
 import range from "lodash/range"
@@ -33,13 +33,13 @@ class SignUp extends Component {
     }
 
     signUpHandler = async values => {
-        this.setState({isLoading: true});
-        let user = this.state.user
-        await Auth.signUp({
-            username: values.email,
-            password: values.password,
-            attributes: {
-                email: values.email,
+                    this.setState({isLoading: true});
+                    let user = this.state.user
+                    await Auth.signUp({
+                        username: values.email,
+                        password: values.password,
+                        attributes: {
+                            email: values.email,
                 phone_number: values.phone,
                 name: values.first_name,
                 given_name: values.last_name,
@@ -75,7 +75,7 @@ class SignUp extends Component {
                         }
                         validate={values => {
                             let errors = {};
-                            Object.keys(values).map((key) => {
+                            Object.keys(values).forEach((key) => {
                                 if (!values[key] || values[key] === '') {
                                     errors[key] = 'This field is required.'
                                 } else if (key === 'email' &&
@@ -89,7 +89,7 @@ class SignUp extends Component {
                                         errors.password = 'Password should contain at least one uppercase letter'
                                     } else if (!/^(?=.*[0-9])/i.test(values.password)) {
                                         errors.password = 'Password should contain at least one numeric character'
-                                    } else if (!/^(?=.*[!@#\$%\^&])/i.test(values.password)) {
+                                    } else if (!/^(?=.*[!@#$%^&])/i.test(values.password)) {
                                         errors.password = 'Password should contain at least one special character'
                                     } else if (!/^(?=.{8,})/i.test(values.password)) {
                                         errors.password = 'Password should be at least 8 sign long'
