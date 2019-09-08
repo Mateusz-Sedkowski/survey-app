@@ -1,33 +1,101 @@
-import React, {Component} from 'react';
-import './App.css';
-import axios from './axios-orders';
-import Surveys from './Surveys/Surveys';
+import React, {Component} from 'react'
+import './App.css'
+import {BrowserRouter} from 'react-router-dom'
+// import axios from './axios-orders'
+import PublicView from './hoc/PublicView/PublicView'
+import PrivateView from './hoc/PrivateView/PrivateView'
+import {Auth} from "aws-amplify";
+
 
 class App extends Component {
     state = {
-        surveys: [],
-        error: false
-    };
+        user: null,
+        error: false,
+        loading: false,
+        name: null,
+        questions: []
+    }
 
-    componentDidMount() {
-        axios.get('/polls')
-            .then(response => {
-                this.setState({
-                    surveys: response.data.body
-                });
-            })
-            .catch(error => {
-                this.setState({ error: true })
-            });
+    seconds_since_epoch = () => {
+        return Math.floor(Date.now() / 1000)
+    }
+
+    createSurvey = () => {
+        this.setState({
+            loading: true
+        })
+        const newSurvey = {
+            // Name: this.state.name,
+            poll: {
+                Name: 'React Test',
+                Created: this.seconds_since_epoch(),
+                Expiry: this.seconds_since_epoch() + 3600 * 24, //TODO Change that!,
+                // Questions: this.state.questions,
+                Questions: [
+                    {
+                        question: 'React test question 1'
+                    }
+                ]
+            }
+        }
+
+        console.log(newSurvey)
+        // TODO COMMENTED TO SAVE AWS FREE TIER
+        // axios.post('/polls', newSurvey, {
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     }
+        // })
+        //     .then(
+        //         (response) => {
+        //             console.log(response)
+        //             this.setState({
+        //                 loading: false
+        //             })
+        //         }
+        //     )
+        //     .catch(
+        //         (error) => {
+        //             console.log(error)
+        //             this.setState({
+        //                 loading: false
+        //             })
+        //         }
+        //     )
+    }
+
+    loginUserHandler = (user) => {
+        this.setState({
+            user: user
+        })
+    }
+
+    logoutHandler = async event => {
+        event.preventDefault();
+
+        try {
+            await Auth.signOut()
+            this.setState({ user: null })
+        } catch (e) {
+            console.log(e.message); //TODO REMOVE AT END
+            this.setState({isLoading: false});
+        }
     }
 
     render() {
+        let view = <PublicView userLoginHandler={this.loginUserHandler}/>
+
+        if (this.state.user != null) {
+            view = <PrivateView user={this.state.user} logoutHandler={this.logoutHandler}/>
+        }
         return (
-            <div className="App">
-                <Surveys surveys={this.state.surveys} />
-            </div>
-        );
+            <BrowserRouter>
+                <div className="App">
+                    {view}
+                </div>
+            </BrowserRouter>
+        )
     }
 }
 
-export default App;
+export default App

@@ -1,0 +1,71 @@
+.Account {
+    height: 100%;
+    margin: 0 20px;
+}
+
+.Account .UserData {
+    height: 100%;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.avatar {
+    height: 20px;
+    width: 20px;
+    margin-left: 10px;
+}
+
+.Account .name {
+    color: white;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 19px;
+    margin-left: 15px;
+}
+
+.Account .icon {
+    margin: 0 10px;
+}
+
+.Account .AccountMenu {
+    position: absolute;
+    display: inline-block;
+    background-color: #0D2D57;
+    top: 60px;
+    right: 0;
+    margin-right: 20px;
+    cursor: pointer;
+    z-index: 2;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;
+}
+
+.AccountMenu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.AccountMenu ul li {
+    width: 100%;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: flex-start;
+    color: white;
+    margin: 10px 50px 0 0;
+}
+
+.AccountMenu ul li:last-of-type {
+    margin-bottom: 10px;
+}
+
+.AccountMenu ul li:hover {
+    background-color: #0D75A4;
+}

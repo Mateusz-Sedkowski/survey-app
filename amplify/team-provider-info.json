@@ -1,0 +1,14 @@
+{
+    "develop": {
+        "awscloudformation": {
+            "AuthRoleName": "survey-app-develop-20190621194045-authRole",
+            "UnauthRoleArn": "arn:aws:iam::383623627055:role/survey-app-develop-20190621194045-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::383623627055:role/survey-app-develop-20190621194045-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "survey-app-develop-20190621194045-deployment",
+            "UnauthRoleName": "survey-app-develop-20190621194045-unauthRole",
+            "StackName": "survey-app-develop-20190621194045",
+            "StackId": "arn:aws:cloudformation:us-east-1:383623627055:stack/survey-app-develop-20190621194045/b34ee160-944b-11e9-b7db-123ad236a92a"
+        }
+    }
+}
