@@ -2,6 +2,7 @@ import React from 'react'
 import { MDBDataTable } from 'mdbreact';
 import {Link} from "react-router-dom";
 import {S3Image} from "aws-amplify-react";
+import './Surveys.scss';
 
 const surveys = (props) => {
     const changeEpochToTime = (epoch) => {
@@ -53,7 +54,7 @@ const surveys = (props) => {
                 }
             },
             {
-                label: '# of Questions',
+                label: 'Number of questions',
                 field: 'questionsCount',
                 sort: 'asc',
                 width: 60,
@@ -85,7 +86,7 @@ const surveys = (props) => {
     return (
         <MDBDataTable
             className='surveysTable'
-            // fixed={true}
+            fixed={true}
             striped
             bordered
             hover
