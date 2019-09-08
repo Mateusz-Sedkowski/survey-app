@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import classes from './NewQuestions.module.scss'
+import {ErrorMessage} from "formik";
 
 class NewQuestions extends Component {
     state = {
@@ -132,6 +133,7 @@ class NewQuestions extends Component {
                     }}
                            placeholder={`Insert #${answerIndex + 1} answer`}
                     />
+                    <ErrorMessage name="answerName" component="div" className='errorMessage'/>
                     {answerIndex > 1 ? deleteAnswerButton : null}
                 </div>
             })
@@ -146,6 +148,7 @@ class NewQuestions extends Component {
                     <input onChange={event => {
                         this.handleNameChange(event, questionIndex)
                     }} placeholder="Insert your question"/>
+                    <ErrorMessage name="question" component="div" className='errorMessage'/>
                 </div>
                 <div className={classes.AnswerHeader}>
                     <span> Answers </span>
@@ -159,12 +162,11 @@ class NewQuestions extends Component {
                 </button>
             </div>
         })
-        console.log("Answers", this.state.questions)
 
         return (
             <>
                 <div className={classes.QuestionsHeader}>
-                    <h3>Questions: </h3>
+                    <h3>Questions </h3>
                     <button type="button" className={classes.AddQuestionButton} onClick={() => this.handleAddQuestion()}>
                         Add Question
                     </button>

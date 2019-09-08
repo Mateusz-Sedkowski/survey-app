@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import NewQuestions from '../Question/NewQuestions'
 import classes from './NewSurvey.module.scss'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import {ErrorMessage, Field, Form, Formik} from "formik"
 import {API, Storage} from "aws-amplify"
-import {S3Image} from "aws-amplify-react"
+import * as Yup from 'yup'
 
 const uuid = require('uuid/v4')
 
@@ -30,7 +30,8 @@ class NewSurvey extends Component {
         }
         let file = e.target.files[0];
         this.setState({
-            icon: file
+            icon: file,
+            fileName: file.name
         })
     }
 
@@ -38,7 +39,7 @@ class NewSurvey extends Component {
         let file = this.state.icon
         let type = file['type'].split('/')[1]
         await Storage.put(`${uuid()}.${type}`, file)
-            .then( async (response) => {
+            .then(async (response) => {
                 console.log("Response", response['key'])
                 await this.setState({
                     icon: response['key']
@@ -66,16 +67,48 @@ class NewSurvey extends Component {
     }
 
     render() {
+        let initialValue = {
+            name: '',
+            description: '',
+            icon: null,
+            expiry: null,
+            questions: [
+                {
+                    question: '',
+                    answers: [
+                        {
+                            name: ''
+                        },
+                        {
+                            name: ''
+                        }
+                    ]
+                }
+            ]
+        }
+        let answerShape = {
+            name: Yup.string().required('Answer value is required')
+        }
+
+        let questionShape = {
+            question: Yup.string().required('Question is required'),
+            answers: Yup.array().of(Yup.object().shape(answerShape))
+        }
+
+        let initialShape = {
+            name: Yup.string().required('Survey name is required'),
+            description: Yup.string().required('You should add a description'),
+            icon: Yup.string().required('Icon is required').nullable(),
+            expiry: Yup.string().required('Please set expiration date of your survey').nullable(),
+            questions: Yup.array().of(Yup.object().shape(questionShape))
+        }
+
         return (
             <div className={classes.NewSurvey}>
-                <h1 className={classes.NewSurveyHeader}>Create new Survey</h1>
+                <h1 className={classes.NewSurveyHeader}>Create Survey</h1>
                 <Formik
-                    initialValues={{}}
-                    validate={values => {
-                        let errors = {}
-                        console.log("Values", values)
-                        return errors;
-                    }}
+                    initialValues={initialValue}
+                    validationSchema={Yup.object().shape(initialShape)}
                     onSubmit={(values) => {
                         console.log("Values bs", values)
                         this.createSurveyHandler(values)
@@ -91,50 +124,73 @@ class NewSurvey extends Component {
                           isSubmitting
                       }) => (
                         <Form className={classes.NewSurveyForm}>
-                            <div className='form-group'>
-                                <label>Survey name: </label>
-                                <Field type='text' name="name" onChange={ val => {
-                                    this.handleChange(val)
-                                    setFieldValue("name", val.target.value)
-                                }}/>
-                                <ErrorMessage name="name" component="div" className='errorMessage'/>
-                            </div>
-                            <div className='form-group'>
-                                <label>Description: </label>
-                                <Field component='textarea' name="description" onChange={ val => {
-                                    this.handleChange(val)
-                                    setFieldValue("description", val.target.value);
-                                }}/>
-                                <ErrorMessage name="description" component="div" className='errorMessage'/>
-                            </div>
-                            <div className='form-group'>
-                                <label>Icon: </label>
-                                <Field type='file' name="icon" accept="image/*" onChange={ val => {
-                                    this.handleFileChange(val)
-                                }}/>
-                                <ErrorMessage name="icon" component="div" className='errorMessage'/>
-                            </div>
-                            <div className='form-group'>
-                                <label>Expiry</label>
-                                <Field render={() =>
-                                    <DatePicker
-                                        minDate={Date.now()}
-                                        peekNextMonth
-                                        dateFormat="dd-MM-yyyy"
-                                        value={values.expiry}
-                                        selected={values.expiry || null}
-                                        onChange={val => {
-                                            this.setState({
-                                                expiry: val
-                                            })
-                                            setFieldValue("expiry", val);
-                                        }}
+                            <div className={classes.Row}>
+                                <div className={classes.FormGroup}>
+                                    <label>Name</label>
+                                    <Field type='text' name="name"/>
+                                    <div className={classes.Error}>
+                                        <ErrorMessage name="name" component="div" className={classes.ErrorMessage}/>
+                                    </div>
+                                </div>
+                                <div className={classes.FormGroup}>
+                                    <label>Icon </label>
+                                    <div className="input-group">
+                                        <div className="custom-file">
+                                            <input
+                                                type="file"
+                                                className="custom-file-input"
+                                                name="icon"
+                                                id="inputGroupFile01"
+                                                aria-describedby="inputGroupFileAddon01"
+                                                accept="image/*"
+                                                onChange={val => {
+                                                    this.handleFileChange(val)
+                                                    setFieldValue('icon', val.target.value)
+                                                }}
+                                            />
+                                            <label className={["custom-file-label", classes.customFileLabel].join(' ')} htmlFor="inputGroupFile01">
+                                                { this.state.fileName || "Choose file" }
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div className={classes.Error}>
+                                        <ErrorMessage name="icon" component="div" className={classes.ErrorMessage}/>
+                                    </div>
+                                </div>
+                                <div className={classes.FormGroup}>
+                                    <label>Expiry</label>
+                                    <Field render={() =>
+                                        <DatePicker
+                                            minDate={Date.now()}
+                                            peekNextMonth
+                                            dateFormat="dd-MM-yyyy"
+                                            value={values.expiry}
+                                            selected={values.expiry || null}
+                                            onChange={val => {
+                                                this.setState({
+                                                    expiry: val
+                                                })
+                                                setFieldValue("expiry", val);
+                                            }}
+                                        />
+                                    }
+                                           name="expiry"
+                                           className='dobField'
                                     />
-                                }
-                                       name="expiry"
-                                       className='dobField'
-                                />
-                                <ErrorMessage name="expiry" component="div" className='errorMessage'/>
+                                    <div className={classes.Error}>
+                                        <ErrorMessage name="expiry" component="div" className={classes.ErrorMessage}/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={classes.Row}>
+                                <div className={[classes.FormGroup, classes.DescriptionFormGroup].join(' ')}>
+                                    <label>Description </label>
+                                    <Field component='textarea' name="description"/>
+                                    <div className={classes.Error}>
+                                        <ErrorMessage name="description" component="div"
+                                                      className={classes.ErrorMessage}/>
+                                    </div>
+                                </div>
                             </div>
                             <div className='form-group'>
                                 <Field name="question" render={() =>
@@ -143,11 +199,13 @@ class NewSurvey extends Component {
                                         value={values.question}
                                     />
                                 }/>
-                                <ErrorMessage name="question" component="div" className='errorMessage'/>
+                                <div className={classes.Error}>
+                                    <ErrorMessage name="question" component="div" className='errorMessage'/>
+                                </div>
                             </div>
-                            <div className="FormActions">
-                                <button type="submit" disabled={isSubmitting}>
-                                    Submit
+                            <div className={classes.SubmitButton}>
+                                <button type="submit">
+                                    Save
                                 </button>
                             </div>
                         </Form>
