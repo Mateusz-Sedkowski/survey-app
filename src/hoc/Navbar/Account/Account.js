@@ -34,12 +34,12 @@ class Account extends Component {
                     name: 'Create New Poll',
                     icon: <IosCogOutline className="icon" color="#FFFFFF" fontSize="20px"/>,
                     path: '/polls/new'
-                },
-                {
-                    name: 'Reports',
-                    icon: <IosCogOutline className="icon" color="#FFFFFF" fontSize="20px"/>,
-                    path: '/reports'
                 }
+                // {
+                //     name: 'Report',
+                //     icon: <IosCogOutline className="icon" color="#FFFFFF" fontSize="20px"/>,
+                //     path: '/reports'
+                // }
             )
         }
     }

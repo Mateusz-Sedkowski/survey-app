@@ -20,7 +20,10 @@ const surveys = (props) => {
             description: survey.Description,
             questionsCount: survey.Questions ? survey.Questions.length : 0,
             created: changeEpochToTime(survey.Created),
-            details: <Link to={`/polls/${survey.Poll_UUID}`}>View</Link>
+            details: <div>
+                <Link to={`/polls/${survey.Poll_UUID}`}>View</Link>
+                <Link to={`/polls/${survey.Poll_UUID}/raport`}>Report</Link>
+            </div>
         }
     })
 

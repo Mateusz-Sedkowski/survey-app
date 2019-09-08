@@ -1,0 +1,74 @@
+.Questions {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.Question {
+  margin: 10px 20px;
+  border: 1px solid #BABABA;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: #495460 2px 2px;
+  width: 30%;
+
+  .header {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    justify-content: center;
+  }
+
+  .Answers {
+    padding: 0 10px;
+  }
+  .Answer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 5px;
+    height: 45px;
+
+    .UserCount {
+      height: 100%;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 10px;
+      background-color: #D5D5D9;
+
+      span {
+        margin-bottom: 0;
+      }
+    }
+
+    .AnswerField {
+      width: 100%;
+      height: 100%;
+      position: relative;
+
+      .AnswerFieldBackground,
+      .AnswerFieldValue {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+      }
+
+      .AnswerFieldValue {
+        display: flex;
+        align-items: center;
+        padding: 0 5px;
+        color: black;
+        z-index: 10;
+      }
+    }
+  }
+}
