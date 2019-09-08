@@ -1,12 +1,12 @@
 import React from 'react'
 import { MDBDataTable } from 'mdbreact';
-import {Link} from "react-router-dom";
-import {S3Image} from "aws-amplify-react";
+import { Link } from "react-router-dom";
+import { S3Image } from "aws-amplify-react";
 import './Surveys.scss';
 
 const surveys = (props) => {
     const changeEpochToTime = (epoch) => {
-        if(epoch) {
+        if (epoch) {
             return new Date(epoch * 1000).toLocaleString()
         } else {
             return '-'
@@ -14,8 +14,8 @@ const surveys = (props) => {
     }
 
     const rows = props.surveys.map((survey) => {
-       return {
-            icon: survey.Icon ? <S3Image imgKey={survey.Icon} alt="Survey icon" width="40px" height="40px"/> : '',
+        return {
+            icon: survey.Icon ? <S3Image imgKey={survey.Icon} alt="Survey icon" width="40px" height="40px" /> : '',
             name: survey.Name,
             description: survey.Description,
             questionsCount: survey.Questions ? survey.Questions.length : 0,

@@ -4,6 +4,10 @@
     padding: 0;
 }
 
+.surveysTable tr td:nth-child(1) div div {
+    text-align: center;
+}
+
 .surveysTable tr td:nth-child(2),
 #name-column {
     width: 25%;
