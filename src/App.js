@@ -1,10 +1,9 @@
 import React, {Component} from 'react'
 import './App.css'
-import {BrowserRouter} from 'react-router-dom'
-// import axios from './axios-orders'
+import {withRouter} from 'react-router-dom'
 import PublicView from './hoc/PublicView/PublicView'
 import PrivateView from './hoc/PrivateView/PrivateView'
-import {Auth} from "aws-amplify";
+import {Auth} from "aws-amplify"
 
 
 class App extends Component {
@@ -13,7 +12,12 @@ class App extends Component {
         error: false,
         loading: false,
         name: null,
-        questions: []
+        questions: [],
+        loggedIn: false
+    }
+
+    componentDidMount() {
+        this.checkUserSession()
     }
 
     seconds_since_epoch = () => {
@@ -38,64 +42,68 @@ class App extends Component {
                 ]
             }
         }
-
         console.log(newSurvey)
-        // TODO COMMENTED TO SAVE AWS FREE TIER
-        // axios.post('/polls', newSurvey, {
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     }
-        // })
-        //     .then(
-        //         (response) => {
-        //             console.log(response)
-        //             this.setState({
-        //                 loading: false
-        //             })
-        //         }
-        //     )
-        //     .catch(
-        //         (error) => {
-        //             console.log(error)
-        //             this.setState({
-        //                 loading: false
-        //             })
-        //         }
-        //     )
     }
 
     loginUserHandler = (user) => {
         this.setState({
-            user: user
+            user: user,
+            loggedIn: true
         })
     }
 
-    logoutHandler = async event => {
+    logoutHandler = event => {
         event.preventDefault();
+        Auth.signOut().then( data => {
+            this.setState({
+                user: null,
+                loggedIn: false
+            })
+            this.props.history.push('/')
+        })
+    }
 
-        try {
-            await Auth.signOut()
-            this.setState({ user: null })
-        } catch (e) {
-            console.log(e.message); //TODO REMOVE AT END
-            this.setState({isLoading: false});
-        }
+    checkUserSession = _ => {
+        Auth.currentSession().then(event => {
+            console.log("Fulfilled", event.accessToken.payload)
+            this.setState({
+                user: {
+                    role: event.accessToken.payload['cognito:groups'][0]
+                }
+            })
+            this.setUserCredentials()
+        }, event => {
+            console.log('Rejected', event)
+            this.setState({
+                loggedIn: false
+            })
+        })
+    }
+
+    setUserCredentials = _ => {
+        Auth.currentAuthenticatedUser({
+            bypassCache: false
+        }).then(user => {
+            console.log("User", user)
+            this.setState({
+                loggedIn: true,
+                user: {
+                    ...this.state.user,
+                    first_name: user.attributes.name,
+                    last_name: user.attributes.given_name
+                }
+            })
+        })
     }
 
     render() {
-        let view = <PublicView userLoginHandler={this.loginUserHandler}/>
-
-        if (this.state.user != null) {
-            view = <PrivateView user={this.state.user} logoutHandler={this.logoutHandler}/>
-        }
         return (
-            <BrowserRouter>
                 <div className="App">
-                    {view}
+                    {this.state.loggedIn ? <PrivateView user={this.state.user} logoutHandler={this.logoutHandler}/>
+                    : <PublicView userLoginHandler={this.loginUserHandler}/>}
                 </div>
-            </BrowserRouter>
         )
     }
 }
 
-export default App
+export default withRouter(App)

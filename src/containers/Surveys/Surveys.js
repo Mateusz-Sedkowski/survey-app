@@ -1,6 +1,6 @@
 import React from 'react'
-import Survey from './Survey/Survey'
 import { MDBDataTable } from 'mdbreact';
+import {Link} from "react-router-dom";
 
 const surveys = (props) => {
     const changeEpochToTime = (epoch) => {
@@ -17,7 +17,8 @@ const surveys = (props) => {
             name: survey.Name,
             description: survey.Description,
             questionsCount: survey.Questions ? survey.Questions.length : 0,
-            created: changeEpochToTime(survey.Created)
+            created: changeEpochToTime(survey.Created),
+            details: <Link to={`/polls/${survey.Poll_UUID}`}>View</Link>
         }
     })
 
@@ -27,31 +28,55 @@ const surveys = (props) => {
                 label: '',
                 field: 'icon',
                 sort: 'asc',
-                width: 60
+                width: 60,
+                attributes: {
+                    'id': 'icon-column'
+                }
             },
             {
                 label: 'Name',
                 field: 'name',
                 sort: 'asc',
-                width: 250
+                width: 300,
+                attributes: {
+                    'id': 'name-column'
+                }
             },
             {
                 label: 'Description',
                 field: 'description',
                 sort: 'asc',
-                width: 250
+                width: 300,
+                attributes: {
+                    'id': 'description-column'
+                }
             },
             {
-                label: 'Questions count',
+                label: '# of Questions',
                 field: 'questionsCount',
                 sort: 'asc',
-                width: 60
+                width: 60,
+                attributes: {
+                    'id': 'questions-count-column'
+                }
             },
             {
                 label: 'Created at',
                 field: 'created',
                 sort: 'asc',
-                width: 100
+                width: 150,
+                attributes: {
+                    'id': 'created-at-column'
+                }
+            },
+            {
+                label: '',
+                field: 'details',
+                sort: 'asc',
+                width: 80,
+                attributes: {
+                    'id': 'details-column'
+                }
             }
         ],
         rows: rows
@@ -59,39 +84,12 @@ const surveys = (props) => {
     return (
         <MDBDataTable
             className='surveysTable'
-            fixed={true}
+            // fixed={true}
             striped
             bordered
             hover
             data={data}
         />
-        // <div className={cssClasses.Surveys}>
-        //     <table>
-        //         <thead>
-        //         <tr>
-        //             <th></th>
-        //             <th>Name</th>
-        //             <th>Description</th>
-        //             <th>Questions count</th>
-        //             <th>Created at</th>
-        //         </tr>
-        //         </thead>
-        //         <tbody>
-        //     {props.surveys.map((survey) => {
-        //         return (
-        //             <Survey
-        //                 key={survey.Poll_UUID}
-        //                 icon={survey.Icon}
-        //                 name={survey.Name}
-        //                 description={survey.Description}
-        //                 created={survey.Created}
-        //                 questions={survey.Questions}
-        //             />
-        //         )
-        //     })}
-        //         </tbody>
-        //     </table>
-        // </div>
     )
 }
 
