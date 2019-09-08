@@ -96,10 +96,10 @@ class NewSurvey extends Component {
         }
 
         let initialShape = {
-            name: Yup.string().required('Survey name is required'),
-            description: Yup.string().required('You should add a description'),
-            icon: Yup.string().required('Icon is required').nullable(),
-            expiry: Yup.string().required('Please set expiration date of your survey').nullable(),
+            name: Yup.string().required('Survey name is required.'),
+            description: Yup.string().required('Survey description is required.'),
+            icon: Yup.string().required('Survey icon is required.').nullable(),
+            expiry: Yup.string().required('Survey expiration date is required.').nullable(),
             questions: Yup.array().of(Yup.object().shape(questionShape))
         }
 

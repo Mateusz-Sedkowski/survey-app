@@ -1,0 +1,38 @@
+.surveysTable tr td:nth-child(1),
+#icon-column {
+    width: 10%;
+    padding: 0;
+}
+
+.surveysTable tr td:nth-child(1) div div {
+    text-align: center;
+}
+
+.surveysTable tr td:nth-child(2),
+#name-column {
+    width: 25%;
+}
+
+.surveysTable tr td:nth-child(3),
+#description-column {
+    width: 40%;
+}
+
+.surveysTable tr td:nth-child(4),
+#questions-count-column {
+    width: 9%;
+}
+
+img {
+    max-width: 100%;
+    height: 73px;
+    object-fit: cover;
+}
+
+.dataTables_info {
+    text-align: left;
+}
+
+.pagination {
+    cursor: pointer;
+}

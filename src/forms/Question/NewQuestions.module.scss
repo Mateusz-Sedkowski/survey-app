@@ -1,3 +1,5 @@
+@import '../../variables';
+
 .QuestionsHeader {
     display: flex;
     align-items: center;
@@ -6,7 +8,6 @@
     h3 {
         margin-left: 25px;
         font-size: 26px;
-        font-weight: bold;
         margin-bottom: 5px;
     }
 
@@ -14,8 +15,8 @@
         height: 40px;
         padding: 0 15px;
         border-radius: 45px;
-        background-color: #2a87d0;
-        border-color: #2a87d0;
+        background-color: $primary-color;
+        border-color: $primary-color;
         color: white;
         text-align: center;
         font-weight: 500;
@@ -134,8 +135,8 @@
         padding: 0 15px;
         height: 30px;
         border-radius: 35px;
-        background-color: #2a87d0;
-        border-color: #2a87d0;
+        background-color: $primary-color;
+        border-color: $primary-color;
         color: white;
         text-align: center;
         font-weight: 500;
